@@ -16,11 +16,11 @@ object Program {
       case Right(f) => println(s"Parsed AST: $f")
       case Left(er) => println(s"Did not pass: $er")
     }
-    */
+     */
 
     FormulaParser("a -> b") match {
-      case Right(f) => 
-        val t = new TseitinTransformer()
+      case Right(f) =>
+        val t                            = new TseitinTransformer()
         val clauses: List[List[Literal]] = t.encode(f)
         println(s"Parsed AST: $f")
         println(s"Clauses \n${clauses.asString}")

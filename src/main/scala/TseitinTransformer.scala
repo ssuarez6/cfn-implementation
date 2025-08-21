@@ -23,11 +23,11 @@ class TseitinTransformer {
 
       case Neg(v: Var) => (NegLiteral(v), List.empty)
 
-      case And(left, right) => 
-        val (leftLiteral, leftClauses) = toCfn(left)
+      case And(left, right) =>
+        val (leftLiteral, leftClauses)   = toCfn(left)
         val (rightLiteral, rightClauses) = toCfn(right)
-        val p = freshVar()
-        val pLit = Pos(p)
+        val p                            = freshVar()
+        val pLit                         = Pos(p)
 
         val newClauses = List(
           List(negate(pLit), leftLiteral),
@@ -38,10 +38,10 @@ class TseitinTransformer {
         (pLit, leftClauses ++ rightClauses ++ newClauses)
 
       case Or(left, right) =>
-        val (leftLiteral, leftClauses) = toCfn(left)
+        val (leftLiteral, leftClauses)   = toCfn(left)
         val (rightLiteral, rightClauses) = toCfn(right)
-        val p = freshVar()
-        val pLit = Pos(p)
+        val p                            = freshVar()
+        val pLit                         = Pos(p)
 
         val newClauses = List(
           List(pLit, negate(leftLiteral)),
@@ -51,14 +51,14 @@ class TseitinTransformer {
 
         (pLit, leftClauses ++ rightClauses ++ newClauses)
 
-      case Impl(left, right) => 
+      case Impl(left, right) =>
         toCfn(Or(Neg(left), right))
 
       case Equiv(left, right) =>
-        val (leftLiteral, leftClauses) = toCfn(left)
+        val (leftLiteral, leftClauses)   = toCfn(left)
         val (rightLiteral, rightClauses) = toCfn(right)
 
-        val p = freshVar()
+        val p        = freshVar()
         val pLiteral = Pos(p)
 
         val newClauses = List(
@@ -73,7 +73,7 @@ class TseitinTransformer {
       case Neg(subFormula) =>
         val (subLiteral, subClauses) = toCfn(subFormula)
 
-        val p = freshVar()
+        val p        = freshVar()
         val pLiteral = Pos(p)
 
         val newClauses = List(
@@ -84,6 +84,5 @@ class TseitinTransformer {
         (pLiteral, subClauses ++ newClauses)
     }
   }
-
 
 }
