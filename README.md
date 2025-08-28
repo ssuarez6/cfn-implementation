@@ -33,6 +33,7 @@ The `pipeline` defined there composes every step of the algorithm in the standar
 ### Requirements
 * sbt 1.11.4
 * openjdk 17.0.4
+* scala 2.13.13
 
 In the root directory of the repository, simply run 
 ```bash
