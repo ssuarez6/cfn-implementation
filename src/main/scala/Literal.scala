@@ -10,7 +10,7 @@ case class Pos(variable: Var)        extends Literal
 case class NegLiteral(variable: Var) extends Literal
 
 object Literal {
-  implicit class CFNSyntax(clauses: List[List[Literal]]) {
+  implicit class CFNSyntax(clauses: List[Clause]) {
     def asString: String = {
       clauses
         .map { disjunctions =>
@@ -19,4 +19,5 @@ object Literal {
         .mkString(" & ")
     }
   }
+  type Clause = Set[Literal]
 }

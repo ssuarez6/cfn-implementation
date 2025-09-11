@@ -1,3 +1,5 @@
+import Literal.Clause
+
 class TseitinTransformer {
 
   private var nextVarId = 0;
@@ -11,12 +13,12 @@ class TseitinTransformer {
     case NegLiteral(v) => Pos(v)
   }
 
-  def encode(f: Formula): List[List[Literal]] = {
+  def encode(f: Formula): List[Clause] = {
     val (rootLiteral, clauses) = toCfn(f)
-    List(rootLiteral) +: clauses
+    List(Set(rootLiteral)) ++ clauses
   }
 
-  def toCfn(f: Formula): (Literal, List[List[Literal]]) = {
+  def toCfn(f: Formula): (Literal, List[Clause]) = {
     f match {
 
       case v: Var => (Pos(v), List.empty)
@@ -30,9 +32,9 @@ class TseitinTransformer {
         val pLit                         = Pos(p)
 
         val newClauses = List(
-          List(negate(pLit), leftLiteral),
-          List(negate(pLit), rightLiteral),
-          List(pLit, negate(leftLiteral), negate(rightLiteral))
+          Set(negate(pLit), leftLiteral),
+          Set(negate(pLit), rightLiteral),
+          Set(pLit, negate(leftLiteral), negate(rightLiteral))
         )
 
         (pLit, leftClauses ++ rightClauses ++ newClauses)
@@ -44,9 +46,9 @@ class TseitinTransformer {
         val pLit                         = Pos(p)
 
         val newClauses = List(
-          List(pLit, negate(leftLiteral)),
-          List(pLit, negate(rightLiteral)),
-          List(negate(pLit), leftLiteral, rightLiteral)
+          Set(pLit, negate(leftLiteral)),
+          Set(pLit, negate(rightLiteral)),
+          Set(negate(pLit), leftLiteral, rightLiteral)
         )
 
         (pLit, leftClauses ++ rightClauses ++ newClauses)
@@ -62,10 +64,10 @@ class TseitinTransformer {
         val pLiteral = Pos(p)
 
         val newClauses = List(
-          List(negate(pLiteral), negate(leftLiteral), rightLiteral),
-          List(negate(pLiteral), leftLiteral, negate(rightLiteral)),
-          List(pLiteral, negate(leftLiteral), rightLiteral),
-          List(pLiteral, leftLiteral, negate(rightLiteral))
+          Set(negate(pLiteral), negate(leftLiteral), rightLiteral),
+          Set(negate(pLiteral), leftLiteral, negate(rightLiteral)),
+          Set(pLiteral, negate(leftLiteral), rightLiteral),
+          Set(pLiteral, leftLiteral, negate(rightLiteral))
         )
 
         (pLiteral, leftClauses ++ rightClauses ++ newClauses)
@@ -77,8 +79,8 @@ class TseitinTransformer {
         val pLiteral = Pos(p)
 
         val newClauses = List(
-          List(negate(pLiteral), negate(subLiteral)),
-          List(pLiteral, subLiteral)
+          Set(negate(pLiteral), negate(subLiteral)),
+          Set(pLiteral, subLiteral)
         )
 
         (pLiteral, subClauses ++ newClauses)

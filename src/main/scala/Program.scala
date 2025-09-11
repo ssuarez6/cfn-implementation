@@ -1,26 +1,31 @@
 import Literal._
-import scala.io.StdIn._
 
 object Program {
 
   def main(args: Array[String]): Unit = {
-    println("Write a logical formula...")
-    val line = readLine()
-    FormulaParser(line) match {
+    //val formula = "(a || b) & (-a || c) & (b || c)"
+    val formula = "a & (a -> (b || c)) & (b -> -a) & (c -> -a)"
+    FormulaParser(formula) match {
       case Right(f) =>
+        println("========================================")
         println(s"Parsed formula: $f")
-        val asCfn: Formula               = CfnTransformer.transform(f)
-        val t: TseitinTransformer        = new TseitinTransformer()
-        val clauses: List[List[Literal]] = t.encode(f)
+        val asCnf: Formula               = CnfTransformer.transform(f)
+        val clauses: List[Clause] = CnfUtils.formulaCnfToList(asCnf)
         println("========================================")
         println("==============CFN-Standard==============")
-        println(s"$asCfn")
+        println(s"$asCnf")
         println("========================================")
+        println("================Clauses=================")
+        println(s"$clauses")
         println("========================================")
-        println("==============CFN-Tseitin==============")
-        println(s"${clauses.asString}")
-        println("========================================")
-      case Left(er) => println(s"You input an invalid logical formula: $er")
+        println(s"Result: ${if (DPLL.solve(clauses)) "SAT" else "UNSAT"}")
+        //val t: TseitinTransformer        = new TseitinTransformer()
+        //val clauses: List[Clause] = t.encode(f)
+        //println("========================================")
+        //println("==============CFN-Tseitin==============")
+        //println(s"${clauses.asString}")
+        //println("========================================")
+      case Left(er) => println(s"bad formula: $er")
     }
   }
 }

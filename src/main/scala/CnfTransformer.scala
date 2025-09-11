@@ -1,4 +1,4 @@
-object CfnTransformer {
+object CnfTransformer {
 
   private val pipeline: Formula => Formula =
     simplify _ andThen
